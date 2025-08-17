@@ -1,6 +1,12 @@
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.linear_model import LinearRegression
+from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
+from sklearn.metrics import mean_squared_error, root_mean_squared_error
 
 df = pd.read_csv("data/AmesHousing.csv")
 
@@ -27,26 +33,44 @@ na_rate = df.isna().mean().sort_values(ascending=False)
 """
 For the columns with more than 40% missing (extremely sparse columns) drop them
 """
-df = df.drop(na_rate[na_rate > 0.4].index, axis=1)
+high_na_cols = na_rate[na_rate > 0.4].index.intersection(df.columns)
+df = df.drop(columns=high_na_cols)
 
 df["log_saleprice"] = np.log1p(df["saleprice"])
 
-# Impute median for columns of type integer or float
-num_cols = df.select_dtypes(include=["int64", "float64"]).columns.drop(["saleprice", "log_saleprice"])
-df[num_cols] = df[num_cols].fillna(df[num_cols].median())
-
-# Impute mode for columns of type object or category
-category_cols = df.select_dtypes(include=["object", "category"]).columns
-df[category_cols] = df[category_cols].fillna(df[category_cols].mode().iloc[0])
-
 # print(df.head())
 
+print(f"The columns are {df.columns}")
+
 y = df["log_saleprice"].copy()
-X = df.drop(["saleprice", "log_saleprice"])
+X = df.drop(["saleprice", "log_saleprice"], axis=1, errors='ignore')
 
 X_train, X_temp, y_train, y_temp = train_test_split(X, y, test_size=0.3, random_state=42)
-
 X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42)
 
+num_cols = X_train.select_dtypes(include=["int64", "float64"]).columns.tolist()
+cat_cols = X_train.select_dtypes(include=["object", "category"]).columns.tolist()
 
+preprocessor = ColumnTransformer(
+    transformers=[
+        ("num", SimpleImputer(strategy="median"), num_cols),
+        ("cat", Pipeline(steps=[
+            ("imputer", SimpleImputer(strategy="most_frequent")),
+            ("onehot", OneHotEncoder(handle_unknown="ignore"))
+        ]), cat_cols)
+    ]
+)
 
+model = Pipeline(steps=[
+    ("preprocessor", preprocessor),
+    ("regressor", LinearRegression())
+
+])
+
+model.fit(X_train, y_train)
+
+val_pred = model.predict(X_val)
+
+rmse_log = root_mean_squared_error(y_val, val_pred)
+
+print(f"The RMSE is {rmse_log}")   
