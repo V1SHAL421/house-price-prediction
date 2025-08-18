@@ -8,6 +8,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.metrics import mean_squared_error, root_mean_squared_error
 from sklearn.dummy import DummyRegressor
+from sklearn.metrics import r2_score
 
 df = pd.read_csv("data/AmesHousing.csv")
 
@@ -88,3 +89,6 @@ baseline_rmse_dollar_base   = root_mean_squared_error(np.expm1(y_val), np.expm1(
 
 print(f"The baseline log-RMSE is {baseline_rmse_log_base:.3f}")
 print(f"The baseline RMSE is {baseline_rmse_dollar_base:.3f}")
+
+r2_val = r2_score(y_val, val_pred)
+print(f"Validation R²: {r2_val:.3f}")
