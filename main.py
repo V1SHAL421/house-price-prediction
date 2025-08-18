@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression, RidgeCV
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.metrics import mean_squared_error, root_mean_squared_error
@@ -66,6 +66,7 @@ preprocessor = ColumnTransformer(
 model = Pipeline(steps=[
     ("preprocessor", preprocessor),
     ("regressor", LinearRegression())
+    # ("regressor", RidgeCV(alphas=np.logspace(-5, 5, 100), cv=5))
 
 ])
 
