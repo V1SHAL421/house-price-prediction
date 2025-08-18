@@ -7,6 +7,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.metrics import mean_squared_error, root_mean_squared_error
+from sklearn.dummy import DummyRegressor
 
 df = pd.read_csv("data/AmesHousing.csv")
 
@@ -71,6 +72,19 @@ model.fit(X_train, y_train)
 
 val_pred = model.predict(X_val)
 
-rmse_log = root_mean_squared_error(y_val, val_pred)
+rmse_log_base = root_mean_squared_error(y_val, val_pred)
+rmse_dollar_base   = root_mean_squared_error(np.expm1(y_val), np.expm1(val_pred))
 
-print(f"The RMSE is {rmse_log}")   
+print(f"The log-RMSE is {rmse_log_base:.3f}")
+print(f"The RMSE is {rmse_dollar_base:.3f}")
+
+baseline = DummyRegressor(strategy="mean")
+
+baseline.fit(X_train, y_train)
+baseline_val_pred = baseline.predict(X_val)
+
+baseline_rmse_log_base = root_mean_squared_error(y_val, baseline_val_pred)
+baseline_rmse_dollar_base   = root_mean_squared_error(np.expm1(y_val), np.expm1(baseline_val_pred))
+
+print(f"The baseline log-RMSE is {baseline_rmse_log_base:.3f}")
+print(f"The baseline RMSE is {baseline_rmse_dollar_base:.3f}")
