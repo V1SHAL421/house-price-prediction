@@ -6,9 +6,10 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.linear_model import LinearRegression, RidgeCV
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
-from sklearn.metrics import mean_squared_error, root_mean_squared_error
+from sklearn.metrics import root_mean_squared_error
 from sklearn.dummy import DummyRegressor
 from sklearn.metrics import r2_score
+from xgboost import XGBRegressor
 
 df = pd.read_csv("data/AmesHousing.csv")
 
@@ -93,3 +94,25 @@ print(f"The baseline RMSE is {baseline_rmse_dollar_base:.3f}")
 
 r2_val = r2_score(y_val, val_pred)
 print(f"Validation R²: {r2_val:.3f}")
+
+xgb_model = Pipeline(steps=[
+    ("preprocessor", preprocessor),
+    ("regressor", XGBRegressor(
+        n_estimators=300,
+        learning_rate=0.1,
+        max_depth=3,
+        subsample=0.8,
+        colsample_bytree=0.8,
+        random_state=42,
+        n_jobs=-1
+    ))
+])
+
+xgb_model.fit(X_train, y_train)
+val_pred_xgb = xgb_model.predict(X_val)
+
+rmse_log_xgb = root_mean_squared_error(y_val, val_pred_xgb)
+r2_val_xgb = r2_score(y_val, val_pred_xgb)
+
+print(f"XGBoost Val log-RMSE: {rmse_log_xgb:.3f}")
+print(f"XGBoost Val R²: {r2_val_xgb:.3f}") 
