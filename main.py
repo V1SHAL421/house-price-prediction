@@ -19,9 +19,6 @@ df = pd.read_csv("data/AmesHousing.csv")
 df.columns = (
     df.columns.str.strip() # Remove leading and trailing whitespace
     .str.lower()  # Convert to lowercase
-    .str.replace(" ", "_")  # Replace spaces with underscores
-    .str.replace("(", "")  # Remove opening parentheses
-    .str.replace(")", "")  # Remove closing parentheses
 )
 
 # print(df.shape)
