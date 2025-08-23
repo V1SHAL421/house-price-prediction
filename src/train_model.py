@@ -4,7 +4,7 @@ from sklearn.dummy import DummyRegressor
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LinearRegression, RidgeCV
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from xgboost import XGBRegressor
 
 
@@ -14,7 +14,10 @@ def build_model(X_train, include_ridge=False) -> tuple[Pipeline, ColumnTransform
 
     preprocessor = ColumnTransformer(
         transformers=[
-            ("num", SimpleImputer(strategy="median"), num_cols),
+            ("num", Pipeline([
+                ("imputer", SimpleImputer(strategy="median")),
+                ("scaler", StandardScaler())
+            ]), num_cols),
             ("cat", Pipeline(steps=[
                 ("imputer", SimpleImputer(strategy="most_frequent")),
                 ("onehot", OneHotEncoder(handle_unknown="ignore"))

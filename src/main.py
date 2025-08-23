@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 from sklearn.metrics import root_mean_squared_error
 from sklearn.metrics import r2_score
@@ -53,4 +54,8 @@ rmse_log_xgb = root_mean_squared_error(y_val, val_pred_xgb)
 r2_val_xgb = r2_score(y_val, val_pred_xgb)
 
 print(f"XGBoost Val log-RMSE: {rmse_log_xgb:.3f}")
-print(f"XGBoost Val R²: {r2_val_xgb:.3f}") 
+print(f"XGBoost Val R²: {r2_val_xgb:.3f}")
+
+# plt.figure(figsize=(5, 4))
+# plt.scatter(np.expm1(y_val), np.expm1(val_pred_xgb), alpha=0.5)
+# plt.axhline()
