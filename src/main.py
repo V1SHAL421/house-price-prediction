@@ -38,8 +38,8 @@ for i in range(num_seeds):
     baseline_rmse_log_base = root_mean_squared_error(y_val, baseline_val_pred)
     baseline_rmse_dollar_base   = root_mean_squared_error(np.expm1(y_val), np.expm1(baseline_val_pred))
 
-    print(f"Baseline log-RMSE: {baseline_rmse_log_base:.3f}")
-    print(f"Baseline RMSE: {baseline_rmse_dollar_base:.3f}")
+    # print(f"Baseline log-RMSE: {baseline_rmse_log_base:.3f}")
+    # print(f"Baseline RMSE: {baseline_rmse_dollar_base:.3f}")
 
     baseline_rmse_log_base_list.append(baseline_rmse_log_base)
     baseline_rmse_dollar_base_list.append(baseline_rmse_dollar_base)
@@ -54,9 +54,9 @@ for i in range(num_seeds):
     lr_rmse_dollar_base   = root_mean_squared_error(np.expm1(y_val), np.expm1(lr_val_pred))
     lr_r2_val = r2_score(y_val, lr_val_pred)
 
-    print(f"LR model log-RMSE: {lr_rmse_log_base:.3f}")
-    print(f"LR model RMSE: {lr_rmse_dollar_base:.3f}")
-    print(f"LR model Validation R²: {lr_r2_val:.3f}")
+    # print(f"LR model log-RMSE: {lr_rmse_log_base:.3f}")
+    # print(f"LR model RMSE: {lr_rmse_dollar_base:.3f}")
+    # print(f"LR model Validation R²: {lr_r2_val:.3f}")
 
     lr_rmse_log_base_list.append(lr_rmse_log_base)
     lr_rmse_dollar_base_list.append(lr_rmse_dollar_base)
@@ -70,9 +70,9 @@ for i in range(num_seeds):
     ridge_rmse_dollar_base   = root_mean_squared_error(np.expm1(y_val), np.expm1(ridge_val_pred))
     ridge_r2_val = r2_score(y_val, ridge_val_pred)
 
-    print(f"Ridge LR model log-RMSE: {ridge_rmse_log_base:.3f}")
-    print(f"Ridge LR model RMSE: {ridge_rmse_dollar_base:.3f}")
-    print(f"Ridge LR model Validation R²: {ridge_r2_val:.3f}")
+    # print(f"Ridge LR model log-RMSE: {ridge_rmse_log_base:.3f}")
+    # print(f"Ridge LR model RMSE: {ridge_rmse_dollar_base:.3f}")
+    # print(f"Ridge LR model Validation R²: {ridge_r2_val:.3f}")
 
     ridge_rmse_log_base_list.append(ridge_rmse_log_base)
     ridge_rmse_dollar_base_list.append(ridge_rmse_dollar_base)
@@ -85,9 +85,9 @@ for i in range(num_seeds):
     xgb_rmse_dollar_base   = root_mean_squared_error(np.expm1(y_val), np.expm1(xgb_val_pred))
     xgb_r2_val = r2_score(y_val, xgb_val_pred)
 
-    print(f"XGBoost Val log-RMSE: {xgb_rmse_log_base:.3f}")
-    print(f"XGBoost Val RMSE: {xgb_rmse_dollar_base:.3f}")
-    print(f"XGBoost Val R²: {xgb_r2_val:.3f}")
+    # print(f"XGBoost Val log-RMSE: {xgb_rmse_log_base:.3f}")
+    # print(f"XGBoost Val RMSE: {xgb_rmse_dollar_base:.3f}")
+    # print(f"XGBoost Val R²: {xgb_r2_val:.3f}")
 
     xgbboost_rmse_log_base_list.append(xgb_rmse_log_base)
     xgbboost_rmse_dollar_base_list.append(xgb_rmse_dollar_base)
@@ -107,4 +107,4 @@ print(f"XGBoost Val R²: {np.mean(xgbboost_r2_val_list):.3f} +/- {np.std(xgbboos
 
 models = ["Baseline", "Linear Regression", "Ridge Regression", "XGBBoost"]
 
-visualise_results("RMSE", models)
+visualise_results("R²", models)
