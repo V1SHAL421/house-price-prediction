@@ -33,7 +33,9 @@ def build_preprocessor(X_train) -> ColumnTransformer:
     return preprocessor
 
 def build_model(preprocessor: ColumnTransformer, estimator: str) -> Pipeline:
-    
+    """
+    Build the model
+    """
     estimators = {
         "lr": LinearRegression(),
         "ridge": RidgeCV(alphas=np.logspace(-5, 5, 100), cv=5),
@@ -57,14 +59,10 @@ def build_model(preprocessor: ColumnTransformer, estimator: str) -> Pipeline:
     
     return model
 
-def train_lr_model(model: Pipeline, X_train, y_train, X_val):
-    model.fit(X_train, y_train)
-
-    val_pred = model.predict(X_val)
-
-    return val_pred
-
 def train_baseline_model(X_train, y_train, X_val):
+    """
+    Train the baseline model
+    """
     baseline = DummyRegressor(strategy="mean")
 
     baseline.fit(X_train, y_train)
@@ -72,8 +70,21 @@ def train_baseline_model(X_train, y_train, X_val):
 
     return baseline_val_pred
 
-def train_xgbboost_model(xgb_model, X_train, y_train, X_val):
+def train_lr_model(model: Pipeline, X_train, y_train, X_val):
+    """
+    Train the linear regression model
+    """
+    model.fit(X_train, y_train)
 
+    val_pred = model.predict(X_val)
+
+    return val_pred
+
+
+def train_xgbboost_model(xgb_model, X_train, y_train, X_val):
+    """
+    Train the XGBoost model
+    """
     xgb_model.fit(X_train, y_train)
     val_pred_xgb = xgb_model.predict(X_val)
 

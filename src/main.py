@@ -14,7 +14,7 @@ df = pd.read_csv(dataset)
 
 df_preprocessed = preprocess_data(df)
 
-num_seeds = 10
+num_seeds = 100
 
 baseline_rmse_log_base_list = []
 baseline_rmse_dollar_base_list = []
@@ -107,4 +107,4 @@ print(f"XGBoost Val R²: {np.mean(xgbboost_r2_val_list):.3f} +/- {np.std(xgbboos
 
 models = ["Baseline", "Linear Regression", "Ridge Regression", "XGBBoost"]
 
-visualise_results("R²", models)
+visualise_results("RMSE", models)
