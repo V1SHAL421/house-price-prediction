@@ -2,7 +2,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 
 
-def visualise_results(eval_metric: str, models):
+def visualise_results(eval_metric: str, models, log_rmse_means, log_rmse_stds, rmse_means, rmse_stds, r2_means, r2_stds):
     """Results from experiment are hardcoded"""
     eval_metrics = {
         "log-RMSE": ([0.399, 0.144, 0.136, 0.115], [0.019, 0.032, 0.029, 0.014]),
